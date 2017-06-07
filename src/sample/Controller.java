@@ -9,31 +9,55 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 
+import java.io.*;
+import java.util.ArrayList;
+
 public class Controller {
     @FXML
     private TextArea info;
 
     @FXML
-    private  Button katkesta;
+    private Button katkesta;
 
     @FXML
-    private  Button edasi;
+    private Button edasi;
 
     @FXML
-    private  Button jätka;
+    private Button jätka;
 
     @FXML
-    private  Button osta;
+    private Button osta;
 
     @FXML
     private ChoiceBox filmid;
 
-    //lisatakse gilmid loetelusse
-    ObservableList<String> filmide_loend = FXCollections
-            .observableArrayList("Jääag 2", "Terminaator", "Voonakeste vaikimine", "Karu süda");
+    //meetod filmide failist lugemiseks
+    private ArrayList filmidFailist() throws IOException {
+        File fail2 = new File("kinokava.txt");
+        BufferedReader br = new BufferedReader(new FileReader(fail2));
+        ArrayList<String> filmid = new ArrayList<>();
+        String rida;
+        while ((rida = br.readLine()) != null) {
+            filmid.add(rida);
+        }
+        return filmid;
+    }
+
+    //lisatakse filmid loetelusse
+    ObservableList<String> filmide_loend = FXCollections.observableArrayList(filmidFailist());
+
+    //kirjutatakse faili ostetud piletite arv
+    private void kirjutaFaili(String piletid) throws FileNotFoundException, UnsupportedEncodingException {
+        java.io.PrintWriter pw = new java.io.PrintWriter("ostetud_piletid.txt", "UTF-8");
+        pw.println("Osteti " + piletid + " piletit filmile " + filmid.getSelectionModel().getSelectedItem().toString() + ".");
+        pw.close();
+    }
 
     @FXML
     private TextField mitu_piletit;
+
+    public Controller() throws IOException {
+    }
 
     // sündmused, mis toovad osade kaupa nähtavale uut infot ja valikuid
     @FXML
@@ -46,11 +70,11 @@ public class Controller {
         osta.setVisible(false);
 
         //esimene juhis
-        info.setText("Tere tulemast kinno Smaragt! Kinokavaga tutvumiseks ja pileti ostmiseks vajuta nupule 'Edasi'");
+        info.setText("Tere tulemast kinno Smaragd! Kinokavaga tutvumiseks ja pileti ostmiseks vajuta nupule 'Edasi'.");
 
-        //"edasi" nupp toob kavas olevate filmide valiku ja edasise juhendi
+        //"Edasi" nupp toob kavas olevate filmide valiku ja edasise juhendi
         edasi.setOnMouseClicked(event -> {
-            info.setText("Siin on toodud meie kavas olevad filmid. Palun vali sobiv film ja vajuta nuppu 'jätka'");
+            info.setText("Siin on toodud meie kavas olevad filmid. Palun vali sobiv film ja vajuta nuppu 'Jätka'.");
             edasi.setVisible(false);
             filmid.setVisible(true);
             filmid.setItems(filmide_loend);
@@ -61,17 +85,17 @@ public class Controller {
         // jätka nupu vajutusel ilmub piletite ostu kastike ja osta nupp
         jätka.setOnMouseClicked(event -> {
             info.setText("Valisid filmiks " + filmid.getSelectionModel().getSelectedItem().toString()
-                    + ". Palun sisesta, mitut piletit soovid osta ning vajuta 'enter'. " +
-                    "Korraga on võimalik osta kuni 10 piletit");
+                    + ". Palun sisesta, mitut piletit soovid osta ning vajuta 'Enter'. " +
+                    "Korraga on võimalik osta kuni 10 piletit.");
             filmid.setVisible(false);
             jätka.setVisible(false);
             mitu_piletit.setVisible(true);
-            osta.setVisible(true);
+            osta.setVisible(false);
 
         });
 
         // mitu piletit soovitakse osta + kontrollitakse sisendit
-        mitu_piletit.setOnKeyPressed(event -> {
+        mitu_piletit.setOnKeyPressed (event -> {
             if (event.getCode().equals(KeyCode.ENTER)) {
                 if (!mitu_piletit.getText().equals("")) {
                     kontroll();
@@ -79,9 +103,17 @@ public class Controller {
             }
         });
 
+
         // ostu nupu vajutuse järel tänatakse, ja peidetakse üleliigsed nupud
         osta.setOnMouseClicked(event -> {
             info.setText("Edasi jälgige kaarditerminali juhiseid! Täname, et otsustasite meie kino valida!");
+            try {
+                kirjutaFaili(mitu_piletit.getText());
+            } catch (FileNotFoundException e) {
+                info.setText("Paistab, et süsteemis tekkis tõrge.");;
+            } catch (UnsupportedEncodingException e) {
+                info.setText("Paistab, et süsteemis tekkis tõrge.");
+            }
             mitu_piletit.setVisible(false);
             katkesta.setVisible(false);
             osta.setVisible(false);
@@ -94,6 +126,9 @@ public class Controller {
             edasi.setVisible(false);
             katkesta.setVisible(false);
             mitu_piletit.setVisible(false);
+            filmid.setVisible(false);
+            jätka.setVisible(false);
+            osta.setVisible(false);
         });
     }
 
@@ -101,21 +136,24 @@ public class Controller {
     private void kontroll() {
         if (!mitu_piletit.getText().equals("")) {
             int arv;
-            try{
+            try {
                 arv = Integer.parseInt(mitu_piletit.getText());
                 if (arv > 0 && arv < 11) {
                     info.setText("Soovite filmile " + filmid.getSelectionModel().getSelectedItem().toString()
                             + " osta " + arv + " piletit. Ostu maksumus on " + arv * 5 + " eurot."
-                            + " Tasumiseks vajuta 'osta' nuppu");
-                    mitu_piletit.setText("");
+                            + " Tasumiseks vajuta nupule 'Osta'.");
+                    mitu_piletit.setVisible(false);
+                    osta.setVisible(true);
+
                 } else
-                    info.setText("Filmile saab osta korraga 1-10 piletit, palun sisesta korrektne täisarv");
-            }catch (NumberFormatException e){
-                info.setText("See ei olnud vist number, palun proovige uuesti");
+                    info.setText("Filmile saab osta korraga 1-10 piletit, palun sisesta korrektne täisarv vastavas vahemikus.");
+            } catch (NumberFormatException e){
+                info.setText("See ei olnud vist number, palun proovige uuesti.");
                 arv = 0;
             }
         }
     }
+
 
 }
 

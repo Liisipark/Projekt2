@@ -4,21 +4,39 @@
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.effect.SepiaTone?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="403.0" prefWidth="352.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+
+<GridPane prefHeight="350.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+   <columnConstraints>
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="68.66665649414062" minWidth="10.0" prefWidth="37.333343505859375" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="106.0" minWidth="10.0" prefWidth="73.33334350585938" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="315.6666564941406" minWidth="10.0" prefWidth="230.66665649414062" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="283.3333435058594" minWidth="10.0" prefWidth="63.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="283.3333435058594" minWidth="10.0" prefWidth="32.0" />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints maxHeight="48.666656494140625" minHeight="0.0" prefHeight="25.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="122.66668701171875" minHeight="10.0" prefHeight="100.33334350585938" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="218.33334350585938" minHeight="10.0" prefHeight="27.33331298828125" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="276.0" minHeight="10.0" prefHeight="173.66668701171875" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="122.0" minHeight="10.0" prefHeight="40.3333740234375" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="81.66668701171875" minHeight="0.0" prefHeight="28.6666259765625" vgrow="SOMETIMES" />
+   </rowConstraints>
    <children>
-      <AnchorPane prefHeight="403.0" prefWidth="352.0">
-         <children>
-            <Button fx:id="katkesta" layoutX="14.0" layoutY="352.0" mnemonicParsing="false" onMouseClicked="#initialize" text="Katkesta" />
-            <Button fx:id="edasi" layoutX="280.0" layoutY="352.0" mnemonicParsing="false" onMouseClicked="#initialize" text="Edasi" />
-            <TextArea fx:id="info" layoutX="24.0" layoutY="21.0" prefHeight="87.0" prefWidth="305.0" wrapText="true" />
-            <Button fx:id="jätka" layoutX="281.0" layoutY="352.0" mnemonicParsing="false" onMouseClicked="#initialize" text="jätka" />
-            <ChoiceBox fx:id="filmid" layoutX="24.0" layoutY="126.0" prefHeight="25.0" prefWidth="305.0" />
-            <TextField fx:id="mitu_piletit" layoutX="24.0" layoutY="151.0" onKeyPressed="#initialize" prefHeight="25.0" prefWidth="42.0" />
-            <Button fx:id="osta" layoutX="276.0" layoutY="352.0" mnemonicParsing="false" onMouseClicked="#initialize" text="osta" />
-         </children>
-      </AnchorPane>
+      <Button fx:id="osta" mnemonicParsing="false" onMouseClicked="#initialize" text="Osta" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+      <Button fx:id="katkesta" mnemonicParsing="false" onMouseClicked="#initialize" text="Katkesta" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+      <Button fx:id="edasi" mnemonicParsing="false" onMouseClicked="#initialize" text="Edasi" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+      <TextArea fx:id="info" prefHeight="96.0" prefWidth="312.0" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="1">
+         <effect>
+            <SepiaTone />
+         </effect>
+      </TextArea>
+      <Button fx:id="jätka" mnemonicParsing="false" onMouseClicked="#initialize" text="Jätka" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+      <ChoiceBox fx:id="filmid" nodeOrientation="LEFT_TO_RIGHT" prefHeight="25.0" prefWidth="305.0" GridPane.columnIndex="2" GridPane.rowIndex="3" GridPane.valignment="TOP" />
+      <TextField fx:id="mitu_piletit" onKeyPressed="#initialize" prefHeight="45.0" prefWidth="249.0" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="3" GridPane.valignment="TOP" GridPane.vgrow="NEVER" />
    </children>
-</Pane>
+</GridPane>
