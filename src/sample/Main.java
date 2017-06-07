@@ -1,5 +1,9 @@
 package sample;
 
+/*
+Autorid: Mari Vaiksaar ja Liisi Park
+ */
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

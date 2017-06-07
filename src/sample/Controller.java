@@ -1,5 +1,9 @@
 package sample;
 
+/*
+Autorid: Mari Vaiksaar ja Liisi Park
+ */
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -46,11 +50,22 @@ public class Controller {
     //lisatakse filmid loetelusse
     ObservableList<String> filmide_loend = FXCollections.observableArrayList(filmidFailist());
 
-    //kirjutatakse faili ostetud piletite arv
+    /*
+    kirjutatakse faili ostetud piletite arv:
+    kui faili ei ole, siis see luuakse
+    kui fail on, siis kirjutatakse olemasolevale failile juurde
+    */
     private void kirjutaFaili(String piletid) throws FileNotFoundException, UnsupportedEncodingException {
-        java.io.PrintWriter pw = new java.io.PrintWriter("ostetud_piletid.txt", "UTF-8");
-        pw.println("Osteti " + piletid + " piletit filmile " + filmid.getSelectionModel().getSelectedItem().toString() + ".");
-        pw.close();
+        try(FileWriter fw = new FileWriter("ostetud_piletid.txt", true);
+        BufferedWriter bw = new BufferedWriter(fw);
+        PrintWriter out = new PrintWriter(bw))
+        {
+            out.println("Osteti " + piletid + " piletit filmile " + filmid.getSelectionModel().getSelectedItem().toString() + ".");
+
+        } catch (IOException e) {
+            info.setText("Piinlik küll, aga programm tuleb taaskäivitada!");
+        }
+
     }
 
     @FXML
@@ -63,7 +78,7 @@ public class Controller {
     @FXML
     private void initialize() {
 
-        //peidame vaatest üleliigse info
+        //peidame vaatest esialgu üleliigse info
         filmid.setVisible(false);
         jätka.setVisible(false);
         mitu_piletit.setVisible(false);
