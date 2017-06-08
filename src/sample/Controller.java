@@ -36,7 +36,7 @@ public class Controller {
     private ChoiceBox filmid;
 
     //meetod filmide failist lugemiseks
-    private ArrayList filmidFailist() throws IOException {
+    private ArrayList<String> filmidFailist() throws IOException {
         File fail2 = new File("kinokava.txt");
         BufferedReader br = new BufferedReader(new FileReader(fail2));
         ArrayList<String> filmid = new ArrayList<>();
